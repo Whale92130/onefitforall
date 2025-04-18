@@ -9,6 +9,7 @@ const ExploreScreen: React.FC = () => {
         <Text>This is the explore page.  Scrollable content can be added here.</Text>
       </View>
     </ScrollView>
+
   );
 };
 

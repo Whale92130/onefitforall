@@ -1,4 +1,3 @@
-
 export const Colors = {
     primary: '#D8D8EB',      // light purple
     secondary: '#7A7AA3',    // dark purple
@@ -7,4 +6,4 @@ export const Colors = {
     textSecondary: '#FFFFFF',  // white
     button: '#007FFF', // blue
     buttonHighlight: '#4691DC', // dark blue
-  };
+};

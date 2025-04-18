@@ -1,22 +1,26 @@
-
 import React from 'react';
-import { View, Text, Image, StyleSheet } from 'react-native';
+import { View, Text, Image, StyleSheet, SafeAreaView } from 'react-native';
+import { Colors } from '../(tabs)/colors';
 
 const TopBar = () => {
-  const profilePictureUrl = 'https://via.placeholder.com/50'; // Replace with actual user profile picture URL
   const streakCount = 10; // Replace with actual user streak count
 
   return (
-    <View style={styles.container}>
-      <Image source={{ uri: profilePictureUrl }} style={styles.profilePicture} />
-      <View style={styles.streakContainer}>
-        <Text style={styles.streakText}>{streakCount}</Text>
+    <SafeAreaView style={styles.safeArea}>
+      <View style={styles.container}>
+        <Image source={require('../../assets/images/logo.jpeg')} style={styles.logo} />
+        <View style={styles.streakContainer}>
+          <Text style={styles.streakText}>{streakCount}</Text>
+        </View>
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  safeArea: {
+    backgroundColor: Colors.background,
+  },
   container: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -24,7 +28,7 @@ const styles = StyleSheet.create({
     padding: 10,
     width: '100%',
   },
-  profilePicture: {
+  logo: {
     width: 50,
     height: 50,
     borderRadius: 25,

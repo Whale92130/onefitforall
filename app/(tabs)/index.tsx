@@ -4,6 +4,7 @@ import YourNextWorkout from './yourNextWorkout';
 import RecomendedWorkouts from './recomendedWorkouts';
 import Leaderboard from './leaderboard';
 import TopBar from './topbar';
+import Navbar from './navbar';
 import { Colors } from '../(tabs)/colors';
 
 export default function HomeScreen() {
@@ -20,6 +21,7 @@ export default function HomeScreen() {
         <View style={styles.bottomItem}><YourNextWorkout /></View>
         <View style={styles.bottomItem}><Leaderboard leaderboardData={leaderboardData} /></View>
       </View>
+      <Navbar/>
     </View>
   );
 }
