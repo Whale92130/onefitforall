@@ -8,7 +8,7 @@ const TopBar = () => {
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
-        <Image source={require('../../assets/images/logo.jpeg')} style={styles.logo} />
+        <Image source={require('../../assets/icons/logo.jpeg')} style={styles.logo} />
         <View style={styles.streakContainer}>
           <Text style={styles.streakText}>{streakCount}</Text>
         </View>

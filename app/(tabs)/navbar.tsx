@@ -1,65 +1,97 @@
+// navbar.tsx
+
 import React from 'react';
-import { View, TouchableOpacity, StyleSheet } from 'react-native';
-import { Ionicons, Feather, MaterialIcons } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
+import {
+  View,
+  TouchableOpacity,
+  StyleSheet,
+  Image,
+  ImageSourcePropType,
+} from 'react-native';
+import { Colors } from '../(tabs)/colors';
 
-const Navbar = () => {
-  const router = useRouter();
+export type IconName = 'home' | 'start' | 'profile';
 
-  const icons = [
-    { name: "home", route: "/(tabs)/index" },
-    { name: "search", icon: "file-text", route: "/(tabs)/explore" },
-    { name: "plus-circle", icon: "plus-circle", route: "/(tabs)/create" },
-    { name: "heart", icon: "heart", route: "/(tabs)/favorites" },
-    { name: "user", icon: "user", route: "/(tabs)/Profile" },
-  ];
-
-  return (
-    <View style={styles.navbar}>
-      {icons.map((icon, index) => (
-        <TouchableOpacity key={index} style={styles.iconContainer} onPress={() => router.push(icon.route)}>
-          {icon.name === "home" && (
-            <Ionicons name="home" size={24} color="black" />
-          )}
-          {icon.name === "search" && (
-            <Feather name="search" size={24} color="black" />
-          )}
-          {icon.name === "plus-circle" && (
-            <Ionicons name="plus-circle" size={24} color="black" />
-          )}
-          {icon.name === "heart" && (
-            <Feather name="heart" size={24} color="black" />
-          )}
-          {icon.name === "user" && (
-            <View style={styles.profileIcon}>
-              <MaterialIcons name="person" size={20} color="black" />
-              {/*  Ideally replace with user profile image */}
-            </View>
-          )}
-        </TouchableOpacity>
-      ))}
-    </View>
-  );
+type IconConfig = {
+  name: IconName;
+  source: ImageSourcePropType;
 };
+
+export type NavbarProps = {
+  activeIcon: IconName;
+  onIconPress: (icon: IconName) => void;
+};
+
+const ICONS: IconConfig[] = [
+  {
+    name: 'home',
+    source: require('../../assets/navbar_icons/home_icon.png'),
+  },
+  {
+    name: 'start',
+    source: require('../../assets/navbar_icons/start_icon.png'),
+  },
+  {
+    name: 'profile',
+    source: require('../../assets/icons/logo.jpeg'),
+  },
+];
+
+const Navbar: React.FC<NavbarProps> = ({ activeIcon, onIconPress }) => (
+  <View style={styles.navbar}>
+    {ICONS.map((icon) => (
+      <TouchableOpacity
+        key={icon.name}
+        style={styles.iconContainer}
+        onPress={() => onIconPress(icon.name)}
+      >
+        <Image
+          source={icon.source}
+          style={[
+            styles.iconImage,
+            activeIcon === icon.name
+              ? styles.activeIcon
+              : styles.inactiveIcon,
+            icon.name === 'profile' && styles.profileIcon,
+          ]}
+        />
+      </TouchableOpacity>
+    ))}
+  </View>
+);
 
 const styles = StyleSheet.create({
   navbar: {
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
-    backgroundColor: '#f0f0f0',
-    paddingVertical: 10,
+    backgroundColor: Colors.background,
     borderTopWidth: 1,
-    borderTopColor: '#ddd',
+    borderTopColor: Colors.background,
+    height: 42,
+    paddingHorizontal: 10,
   },
   iconContainer: {
+    flex: 1,
     alignItems: 'center',
+    justifyContent: 'center',
   },
-  iconText: {
-    fontSize: 12,
+  iconImage: {
+    width: 28,
+    height: 28,
   },
   profileIcon: {
-    // Style for profile icon if needed
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: Colors.textPrimary,
+  },
+  activeIcon: {
+    tintColor: Colors.button,
+  },
+  inactiveIcon: {
+    tintColor: 'black',
   },
 });
 
