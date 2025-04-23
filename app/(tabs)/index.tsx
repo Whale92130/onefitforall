@@ -22,9 +22,10 @@ export default function HomeScreen() {
 
   const renderSection = () => {
     switch (currentSection) {
-      case 'start':
+      case 'newWorkout':
         return (
           <View style={styles.sectionContainer}>
+            {/* ADD ALL CODE FOR NEW WORKOUT PAGE HERE */}
             <Timer/>
           </View>
         );
@@ -38,6 +39,7 @@ export default function HomeScreen() {
       default:
         return (
           <>
+          <TopBar/>
             <View style={styles.topSection}>
               <RecomendedWorkouts />
             </View>
@@ -56,7 +58,6 @@ export default function HomeScreen() {
 
   return (
     <View style={styles.container}>
-      <TopBar />
       {renderSection()}
       <Navbar
         activeIcon={currentSection}

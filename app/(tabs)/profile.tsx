@@ -1,48 +1,139 @@
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import {
+  StyleSheet,
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  TextInput,
+  Alert,
+  Platform, // Import Platform
+} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
+import * as ImagePicker from 'expo-image-picker'; // Import ImagePicker
 
-export default function Profile() {
-  const router = useRouter();
+export default function ProfileScreen() {
+  const [username, setUsername] = useState('Username');
+  const [isEditingUsername, setIsEditingUsername] = useState(false);
+  const [tempUsername, setTempUsername] = useState(username);
+  const [profilePicUri, setProfilePicUri] = useState<string | null>(null); // Use null initially
+
+  // Request permissions on component mount
+  useEffect(() => {
+    (async () => {
+      if (Platform.OS !== 'web') {
+        const libraryStatus = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (libraryStatus.status !== 'granted') {
+          Alert.alert('Permission Denied', 'Sorry, we need camera roll permissions to make this work!');
+        }
+        // You might also want to request camera permissions if you allow taking photos
+        // const cameraStatus = await ImagePicker.requestCameraPermissionsAsync();
+        // if (cameraStatus.status !== 'granted') {
+        //   Alert.alert('Permission Denied', 'Sorry, we need camera permissions to make this work!');
+        // }
+      }
+    })();
+  }, []);
+
+  const handleEditPicture = async () => {
+    // Check permissions again in case they were changed in settings
+    const libraryStatus = await ImagePicker.getMediaLibraryPermissionsAsync();
+    if (libraryStatus.status !== 'granted') {
+       Alert.alert(
+        'Permission Required',
+        'Please grant camera roll permissions in your settings to select a profile picture.',
+        [
+          { text: "OK" }
+        ]
+      );
+      // Optionally, try requesting again or guide user to settings
+      // const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      // if (status !== 'granted') return;
+      return; // Exit if permission not granted
+    }
+
+    // Launch the image library
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [1, 1], // Keep aspect ratio square for profile pics
+      quality: 0.5, // Reduce quality to save space/bandwidth
+    });
+
+    console.log(result); // Log result for debugging
+
+    if (!result.canceled) {
+      if (result.assets && result.assets.length > 0) {
+        setProfilePicUri(result.assets[0].uri);
+        // TODO: Implement logic to upload the selected image to your server/storage
+        Alert.alert('Profile Picture Updated', 'Your new picture has been selected.');
+      }
+    }
+  };
+
+  const handleEditUsername = () => {
+    setTempUsername(username);
+    setIsEditingUsername(true);
+  };
+
+  const handleSaveUsername = () => {
+    setUsername(tempUsername);
+    setIsEditingUsername(false);
+    // TODO: Add logic to save the username persistently (e.g., API call, AsyncStorage)
+    Alert.alert('Username Saved', `Username changed to: ${tempUsername}`);
+  };
+
+  const handleCancelEditUsername = () => {
+    setIsEditingUsername(false);
+  };
+
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.title}>Profile</Text>
-        <TouchableOpacity style={styles.settingsButton}>
-          <Ionicons name="settings-outline" size={24} color="black" />
+      {/* Profile Picture Section */}
+      <View style={styles.profilePicContainer}>
+        <Image
+          // Use a default placeholder if profilePicUri is null
+          source={profilePicUri ? { uri: profilePicUri } : require('../../assets/images/default_avatar.png')} // Correct path
+          style={styles.profilePic}
+        />
+        <TouchableOpacity style={styles.editPicButton} onPress={handleEditPicture}>
+          {/* Correct the path here */}
+          <Image source={require('../../assets/images/editProfilePic.png')} style={styles.editIcon} />
         </TouchableOpacity>
       </View>
 
-      <View style={styles.profileSection}>
-        <TouchableOpacity style={styles.profilePictureArea}>
-          <Image
-            source={{ uri: 'https://via.placeholder.com/150' }}
-            style={styles.profilePicture}
-          />
-        </TouchableOpacity>
-        <Text style={styles.username}>Username</Text>
+      {/* Username Section */}
+      <View style={styles.usernameContainer}>
+        {isEditingUsername ? (
+          <View style={styles.editUsernameView}>
+            <TextInput
+              style={styles.usernameInput}
+              value={tempUsername}
+              onChangeText={setTempUsername}
+              autoFocus
+              onSubmitEditing={handleSaveUsername}
+            />
+            <TouchableOpacity onPress={handleSaveUsername} style={styles.iconButton}>
+              <Ionicons name="checkmark-circle-outline" size={28} color="green" />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={handleCancelEditUsername} style={styles.iconButton}>
+              <Ionicons name="close-circle-outline" size={28} color="red" />
+            </TouchableOpacity>
+          </View>
+        ) : (
+          <View style={styles.displayUsernameView}>
+            <Text style={styles.usernameText}>{username}</Text>
+            <TouchableOpacity onPress={handleEditUsername} style={styles.iconButton}>
+              {/* Correct the path here */}
+              <Image source={require('../../assets/images/editUsername.png')} style={styles.editUsernameIcon} />
+            </TouchableOpacity>
+          </View>
+        )}
       </View>
 
-      <View style={styles.goalsBar}>
-        <Text>Goals Progress</Text>
-      </View>
+      {/* Other Profile Info (Placeholder for Goal and Friends) */}
+      {/* Add Goal and Friends sections here based on the image if needed */}
 
-      <View style={styles.friendsBar}>
-        <Text>Friends (100)</Text>
-      </View>
-
-      <View style={styles.shopCratesContainer}>
-        <TouchableOpacity style={styles.shopButton} onPress={() => {
-          router.push("/Shop");
-        }}>
-          <Text>Shop</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.cratesButton} onPress={() => {
-          router.push("/Crates");
-        }}>
-          <Text>Crates</Text>
-        </TouchableOpacity>
-      </View>
     </View>
   );
 }
@@ -50,65 +141,73 @@ export default function Profile() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
-    backgroundColor: '#f5f5f5',
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 20,
+    paddingTop: 50,
+    backgroundColor: '#fff',
   },
-  title: {
+  profilePicContainer: {
+    marginBottom: 20,
+    alignItems: 'center',
+    position: 'relative',
+  },
+  profilePic: {
+    width: 150,
+    height: 150,
+    borderRadius: 75,
+    backgroundColor: '#e0e0e0',
+    borderWidth: 1,
+    borderColor: '#ccc',
+  },
+  editPicButton: {
+    position: 'absolute',
+    bottom: 5,
+    right: 5,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    padding: 6,
+    borderRadius: 15,
+    width: 30,
+    height: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  usernameContainer: {
+    alignItems: 'center',
+    marginBottom: 30,
+  },
+  displayUsernameView: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  usernameText: {
     fontSize: 24,
     fontWeight: 'bold',
+    marginRight: 5,
   },
-  settingsButton: {
-    padding: 10,
-  },
-  profileSection: {
-    alignItems: 'center',
-    marginBottom: 20,
-  },
-  profilePictureArea: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    overflow: 'hidden',
-    marginBottom: 10,
-  },
-  profilePicture: {
-    width: '100%',
-    height: '100%',
-  },
-  username: {
-    fontSize: 18,
-    fontWeight: '600',
-  },
-  goalsBar: {
-    backgroundColor: '#e0e0e0',
-    padding: 15,
-    borderRadius: 10,
-    marginBottom: 15,
-  },
-  friendsBar: {
-    backgroundColor: '#e0e0e0',
-    padding: 15,
-    borderRadius: 10,
-    marginBottom: 20,
-  },
-  shopCratesContainer: {
+  editUsernameView: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    alignItems: 'center',
+    borderBottomWidth: 1,
+    borderColor: '#ccc',
+    paddingBottom: 2,
   },
-  shopButton: {
-    backgroundColor: '#c0c0c0',
-    padding: 15,
-    borderRadius: 10,
+  usernameInput: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    paddingVertical: 5,
+    minWidth: 100,
+    marginRight: 5,
   },
-  cratesButton: {
-    backgroundColor: '#c0c0c0',
-    padding: 15,
-    borderRadius: 10,
+  iconButton: {
+    padding: 5,
+  },
+  editIcon: {
+    width: 18, // Adjusted size slightly
+    height: 18,
+    tintColor: 'white',
+  },
+  editUsernameIcon: { // Can be the same as editIcon or different
+    width: 24,
+    height: 24,
+    tintColor: '#555',
   },
 });

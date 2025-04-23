@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import { Colors } from '../(tabs)/colors';
 
-export type IconName = 'home' | 'start' | 'profile';
+export type IconName = 'home' | 'newWorkout' | 'profile';
 
 type IconConfig = {
   name: IconName;
@@ -28,7 +28,7 @@ const ICONS: IconConfig[] = [
     source: require('../../assets/navbar_icons/home_icon.png'),
   },
   {
-    name: 'start',
+    name: 'newWorkout',
     source: require('../../assets/navbar_icons/start_icon.png'),
   },
   {

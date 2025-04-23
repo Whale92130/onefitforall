@@ -8,13 +8,17 @@ const TopBar = () => {
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
-        <Image source={require('../../assets/icons/logo.jpeg')} style={styles.logo} />
-        <View style={styles.streakContainer}>
-          <Text style={styles.streakText}>{streakCount}</Text>
-        </View>
+      <Image source={require('../../assets/icons/logo.jpeg')} style={styles.logo} />
+      <View style={styles.streakContainer}>
+        <Image
+          source={require('../../assets/images/fire.png')}
+          style={{ width: 20, height: 20, marginRight: 5 }}
+        />
+        <Text style={styles.streakText}>{streakCount}</Text>
+      </View>
       </View>
     </SafeAreaView>
-  );
+  )
 };
 
 const styles = StyleSheet.create({
@@ -34,10 +38,13 @@ const styles = StyleSheet.create({
     borderRadius: 25,
   },
   streakContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
     backgroundColor: '#e0e0e0',
     padding: 8,
     borderRadius: 15,
   },
+
   streakText: {
     fontSize: 16,
     fontWeight: 'bold',
