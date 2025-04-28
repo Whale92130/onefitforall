@@ -1,5 +1,6 @@
 // HomeScreen.tsx
 
+
 import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import YourNextWorkout from './yourNextWorkout';
@@ -8,11 +9,15 @@ import Leaderboard from './leaderboard';
 import TopBar from './topbar';
 import Navbar, { IconName } from './navbar';
 import Profile from './profile';
-import Timer from  './timer';
+//import Stopwatch from  './stopwatch';
 import { Colors } from '../(tabs)/colors';
+//import Shop from './shop';
+import OpenCrate from './openCrate';
+
 
 export default function HomeScreen() {
   const [currentSection, setCurrentSection] = useState<IconName>('home');
+
 
   const leaderboardData = [
     { name: 'Alice Johnson', workouts: 15 },
@@ -20,26 +25,30 @@ export default function HomeScreen() {
     { name: 'Charlie Brown', workouts: 10 },
   ];
 
+
   const renderSection = () => {
     switch (currentSection) {
       case 'newWorkout':
         return (
           <View style={styles.sectionContainer}>
             {/* ADD ALL CODE FOR NEW WORKOUT PAGE HERE */}
-            <Timer/>
+            
           </View>
         );
       case 'profile':
         return (
-          <View style={styles.sectionContainer}>
-            <Profile/>
-          </View>
+          <>
+            <View style={styles.sectionContainer}>
+              <Profile />
+              <OpenCrate />
+            </View>
+          </>
         );
       case 'home':
       default:
         return (
           <>
-          <TopBar/>
+            <TopBar />
             <View style={styles.topSection}>
               <RecomendedWorkouts />
             </View>
@@ -56,6 +65,7 @@ export default function HomeScreen() {
     }
   };
 
+
   return (
     <View style={styles.container}>
       {renderSection()}
@@ -66,6 +76,7 @@ export default function HomeScreen() {
     </View>
   );
 }
+
 
 const styles = StyleSheet.create({
   container: {
@@ -87,7 +98,9 @@ const styles = StyleSheet.create({
     margin: 5,
   },
   sectionContainer: {
+    display: 'flex',
+    justifyContent: 'flex-start', // Push children to the top
     flex: 1,
     margin: 10,
-  },
+  },  
 });

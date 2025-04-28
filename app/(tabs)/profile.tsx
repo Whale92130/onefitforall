@@ -89,7 +89,18 @@ export default function ProfileScreen() {
 
   return (
     <View style={styles.container}>
-      {/* Profile Picture Section */}
+      {/* Header Section */
+      <View style={styles.headerContainer}>
+ <Text style={styles.headerText}>Profile</Text>
+        <TouchableOpacity onPress={() => {/* Navigate to settings */}}>
+          <Image
+ style={styles.settingsIcon}
+            source={require('/home/user/onefitforall/assets/images/settings.png')}
+          />
+        </TouchableOpacity>
+      </View>
+
+      }
       <View style={styles.profilePicContainer}>
         <Image
           // Use a default placeholder if profilePicUri is null
@@ -140,9 +151,8 @@ export default function ProfileScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: 1, // Ensures the container fills the available space
     alignItems: 'center',
-    paddingTop: 50,
     backgroundColor: '#fff',
   },
   profilePicContainer: {
@@ -209,5 +219,21 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
     tintColor: '#555',
+  },
+  headerContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+    paddingHorizontal: 20,
+    alignItems: 'center',
+  },
+  headerText: {
+    fontSize: 24,
+    fontWeight: 'bold',
+  },
+  settingsIcon: {
+    width: 30, // Adjust size as needed
+    height: 30, // Adjust size as needed
+    tintColor: 'black', // Make the settings icon black
   },
 });
