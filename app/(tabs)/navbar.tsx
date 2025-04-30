@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
     tintColor: Colors.button,
   },
   inactiveIcon: {
-    tintColor: 'black',
+    tintColor: Colors.textPrimary,
   },
 });
 

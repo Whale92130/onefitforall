@@ -1,8 +1,34 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image } from 'react-native';
 import { Colors } from './colors'; // Assuming you have a colors file
+import { useRouter } from 'expo-router';
+
+// Define Colors if not imported (replace with your actual Colors import)
+// const Colors = {
+//   background: '#FFFFFF',
+//   textPrimary: '#000000',
+//   textSecondary: '#555555',
+//   border: '#DDDDDD',
+//   primary: '#FF0000', // Example danger color for logout
+// };
 
 const SettingsScreen = () => {
+  // --- Hooks must be called inside the component ---
+  const router = useRouter();
+
+  const navigateToProfile = () => {
+    // Use router.back() typically for a back button
+    // router.push('/'); // Or push to a specific route if needed
+    if (router.canGoBack()) {
+        router.back();
+    } else {
+        // Optional: Fallback if there's no screen to go back to
+        router.replace('/'); // Go to home/root as a fallback
+    }
+  };
+  // --- End Hook Placement Fix ---
+
+
   // Placeholder functions for settings actions
   const handleAccountPress = () => {
     console.log('Account settings pressed');
@@ -25,9 +51,20 @@ const SettingsScreen = () => {
   };
 
   return (
+    // Use contentContainerStyle for inner padding if needed, but paddingTop on the ScrollView works well here.
     <ScrollView style={styles.container}>
-      <Text style={styles.header}>Settings</Text>
+      {/* Header Section */}
+      <View style={styles.headerContainer}>
+        <TouchableOpacity onPress={navigateToProfile} style={styles.backButton}>
+          <Image
+            source={require('../../assets/images/back.png')} // Ensure this path is correct
+            style={styles.backIcon}
+          />
+        </TouchableOpacity>
+        <Text style={styles.headerText}>Settings</Text>
+      </View>
 
+      {/* Settings Items Section */}
       <TouchableOpacity style={styles.settingItem} onPress={handleAccountPress}>
         <Text style={styles.settingText}>Account</Text>
         <Text style={styles.arrow}>{'>'}</Text>
@@ -45,6 +82,7 @@ const SettingsScreen = () => {
 
       {/* Add more settings items as needed */}
 
+      {/* Logout Button */}
       <TouchableOpacity style={[styles.settingItem, styles.logoutButton]} onPress={handleLogoutPress}>
         <Text style={[styles.settingText, styles.logoutText]}>Logout</Text>
       </TouchableOpacity>
@@ -55,43 +93,67 @@ const SettingsScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.background, // Use background color from your theme
+    backgroundColor: Colors.background,
+    // --- Add paddingTop to push content down from the top edge ---
+    paddingTop: 20, // Adjust this value for desired margin
   },
-  header: {
+  headerContainer: {
+    flexDirection: 'row', // Arrange items horizontally
+    alignItems: 'center', // Align items vertically in the center
+    // --- Change from 'center' to 'flex-start' to align left ---
+    justifyContent: 'flex-start',
+    // --- Add horizontal padding for space from screen edges ---
+    paddingHorizontal: 15,
+    // --- Add bottom padding for space below the header line ---
+    paddingBottom: 15, // Creates space before the first setting item
+    // Remove paddingTop here, handled by container's paddingTop
+  },
+  backButton: {
+    // Add padding if the touchable area needs to be larger than the icon
+    padding: 5, // Optional: makes the button easier to press
+  },
+  backIcon: {
+    width: 24,
+    height: 24,
+    // --- Add marginRight to space the icon from the text ---
+    marginRight: 10, // Adjust spacing as needed
+    tintColor: Colors.textPrimary, // Use color from theme
+  },
+  headerText: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: Colors.textPrimary, // Use text color from your theme
-    paddingHorizontal: 20,
-    paddingTop: 40, // Adjust as needed for status bar height
-    paddingBottom: 20,
+    color: Colors.textPrimary,
+    // --- Remove specific padding, alignment is handled by container ---
   },
   settingItem: {
-    backgroundColor: Colors.background, // Use a list item background color
+    backgroundColor: Colors.background, // Or a slightly different shade like Colors.listItemBackground
     paddingVertical: 15,
-    paddingHorizontal: 20,
+    // --- Consistent horizontal padding ---
+    paddingHorizontal: 20, // Match or relate to header padding
     borderBottomWidth: 1,
-    borderBottomColor: Colors.textPrimary, // Use a border color
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
   },
   settingText: {
     fontSize: 18,
-    color: Colors.textPrimary, // Use text color from your theme
+    color: Colors.textPrimary,
   },
   arrow: {
       fontSize: 18,
-      color: Colors.textPrimary, // Use a secondary text color
+      color: Colors.textSecondary, // Use secondary color for less emphasis
   },
   logoutButton: {
-    marginTop: 30,
-    borderBottomWidth: 0, // Remove bottom border for logout
-    backgroundColor: Colors.background, // Use a danger/warning color
+    marginTop: 30, // Space above the logout button
+    borderBottomWidth: 0, // No line below logout
+    // Optionally change background for emphasis, but often not needed
+    // backgroundColor: Colors.dangerBackground,
   },
   logoutText: {
-    color: Colors.primary, // Use text color suitable for the danger background
-    textAlign: 'center',
-    flex: 1, // Make text take full width for centering
+    color: Colors.primary, // Use a distinct color (like red) for logout
+    textAlign: 'center', // Center the text
+    flex: 1, // Ensure it takes full width for centering to work reliably
+    fontWeight: 'bold', // Make it stand out
   },
 });
 

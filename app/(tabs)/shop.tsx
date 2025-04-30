@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet, Dimensions, TouchableOpacity, ScrollView } from 'react-native';
 import { useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
 import { Colors } from '../(tabs)/colors';
-
 
 
 type Item = {
@@ -12,6 +12,7 @@ type Item = {
 
 const Shop = () => {
   const [money, setMoney] = useState(900000);
+  const navigation = useNavigation();
   const items: Item[] = [
     { name: 'Golden Wreath', price: 1000000 },
     { name: 'Deep Space', price: 50000 },
@@ -31,6 +32,11 @@ const Shop = () => {
 
   return (
     <View style={styles.container}>
+      <View style={styles.backButtonContainer}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Text style={styles.backButtonText}>Back</Text>
+        </TouchableOpacity>
+      </View>
       <Text style={styles.moneyText}>Money: {money}</Text>
       <ScrollView contentContainerStyle={styles.shopContainer}>
         {items.map((item, index) => (
@@ -56,6 +62,20 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  backButtonContainer: {
+    position: 'absolute',
+    top: 40, // Adjust as needed
+    left: 20, // Adjust as needed
+    zIndex: 1, // Ensure button is above other content
+    backgroundColor: Colors.primary, // Background color of the box
+    padding: 10, // Padding inside the box
+    borderRadius: 5, // Optional: add some border radius
+  },
+  backButtonText: {
+    fontSize: 18,
+    color: Colors.textPrimary, // Text color (white in this example for better contrast)
+    fontWeight: 'bold',
   },
   moneyText: { 
     fontSize: 24,
@@ -87,9 +107,11 @@ const styles = StyleSheet.create({
   itemName: {
     fontSize: 16, // Adjust font size as needed
     textAlign: 'center', // Center item name
+    color: Colors.textPrimary,
   },
   priceText: {
     fontSize: 14,
+    color: Colors.textPrimary,
   },
 });
 

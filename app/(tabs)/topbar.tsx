@@ -12,7 +12,7 @@ const TopBar = () => {
       <View style={styles.streakContainer}>
         <Image
           source={require('../../assets/images/fire.png')}
-          style={{ width: 20, height: 20, marginRight: 5 }}
+          style={{ width: 20, height: 20, marginRight: 5, tintColor: Colors.textPrimary }}
         />
         <Text style={styles.streakText}>{streakCount}</Text>
       </View>
@@ -36,11 +36,12 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     borderRadius: 25,
+    backgroundColor: Colors.background,
   },
   streakContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#e0e0e0',
+    backgroundColor: Colors.primary,
     padding: 8,
     borderRadius: 15,
   },
@@ -48,6 +49,7 @@ const styles = StyleSheet.create({
   streakText: {
     fontSize: 16,
     fontWeight: 'bold',
+    color: Colors.textPrimary,
   },
 });
 

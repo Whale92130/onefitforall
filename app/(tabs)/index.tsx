@@ -1,6 +1,7 @@
 // HomeScreen.tsx
 
-
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import YourNextWorkout from './yourNextWorkout';
@@ -13,6 +14,8 @@ import Profile from './profile';
 import { Colors } from '../(tabs)/colors';
 //import Shop from './shop';
 import OpenCrate from './openCrate';
+import OpenShop from './openShop';
+import SettingsScreen from './settings';
 
 
 export default function HomeScreen() {
@@ -25,6 +28,7 @@ export default function HomeScreen() {
     { name: 'Charlie Brown', workouts: 10 },
   ];
 
+  const Stack = createStackNavigator();
 
   const renderSection = () => {
     switch (currentSection) {
@@ -32,15 +36,18 @@ export default function HomeScreen() {
         return (
           <View style={styles.sectionContainer}>
             {/* ADD ALL CODE FOR NEW WORKOUT PAGE HERE */}
-            
+
           </View>
         );
       case 'profile':
         return (
           <>
             <View style={styles.sectionContainer}>
-              <Profile />
-              <OpenCrate />
+              <Profile/>
+              <View style={styles.horizontalButtons}>
+                <OpenCrate/>
+                <OpenShop/>
+              </View>
             </View>
           </>
         );
@@ -102,5 +109,9 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start', // Push children to the top
     flex: 1,
     margin: 10,
-  },  
+  },
+  horizontalButtons: {
+    flexDirection: 'row', // Arrange children horizontally
+    marginTop: 10, // Add some space below the profile
+  },
 });

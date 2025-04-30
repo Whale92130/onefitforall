@@ -2,14 +2,14 @@ import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
 import { Colors } from '../(tabs)/colors';
 import { useNavigation } from 'expo-router';
 
-export default function OpenCrateScreen() {
+export default function OpenShopScreen() {
   const navigation = useNavigation();
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('crates')}>
-        <Image source={require('../../assets/images/crate.png')} style={styles.image} />
-        <Text style={styles.text}>Open crates</Text>
+      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('shop')}>
+        <Image source={require('../../assets/navbar_icons/shop_icon.png')} style={styles.image} />
+        <Text style={styles.text}>Open Shop</Text>
       </TouchableOpacity>
     </View>
   );
@@ -33,6 +33,7 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     marginBottom: 5,
+    tintColor: Colors.textPrimary,
   },
   text: {
     fontSize: 16,

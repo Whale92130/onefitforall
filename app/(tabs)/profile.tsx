@@ -7,16 +7,20 @@ import {
   TouchableOpacity,
   TextInput,
   Alert,
-  Platform, // Import Platform
+  Platform,
+  Settings, // Import Platform
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker'; // Import ImagePicker
+import { useRouter } from 'expo-router';
+import { Colors } from './colors';
 
 export default function ProfileScreen() {
   const [username, setUsername] = useState('Username');
   const [isEditingUsername, setIsEditingUsername] = useState(false);
   const [tempUsername, setTempUsername] = useState(username);
   const [profilePicUri, setProfilePicUri] = useState<string | null>(null); // Use null initially
+  const router = useRouter();
 
   // Request permissions on component mount
   useEffect(() => {
@@ -39,7 +43,7 @@ export default function ProfileScreen() {
     // Check permissions again in case they were changed in settings
     const libraryStatus = await ImagePicker.getMediaLibraryPermissionsAsync();
     if (libraryStatus.status !== 'granted') {
-       Alert.alert(
+      Alert.alert(
         'Permission Required',
         'Please grant camera roll permissions in your settings to select a profile picture.',
         [
@@ -87,18 +91,21 @@ export default function ProfileScreen() {
     setIsEditingUsername(false);
   };
 
+  const navigateToSettings = () => {
+    router.push('/(tabs)/settings'); // Navigate to the settings tab
+  };
+
   return (
     <View style={styles.container}>
       {/* Header Section */
-      <View style={styles.headerContainer}>
- <Text style={styles.headerText}>Profile</Text>
-        <TouchableOpacity onPress={() => {/* Navigate to settings */}}>
-          <Image
- style={styles.settingsIcon}
-            source={require('/home/user/onefitforall/assets/images/settings.png')}
-          />
-        </TouchableOpacity>
-      </View>
+        <View style={styles.headerContainer}>
+          <Text style={styles.headerText}>Profile</Text>
+
+          <TouchableOpacity onPress={navigateToSettings}>
+            <Image source={require('../../assets/images/settings.png')} style={styles.settingsIcon} />
+          </TouchableOpacity>
+
+        </View>
 
       }
       <View style={styles.profilePicContainer}>
@@ -153,7 +160,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1, // Ensures the container fills the available space
     alignItems: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: Colors.background,
   },
   profilePicContainer: {
     marginBottom: 20,
@@ -189,6 +196,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   usernameText: {
+    color: Colors.textPrimary,
     fontSize: 24,
     fontWeight: 'bold',
     marginRight: 5,
@@ -197,7 +205,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     borderBottomWidth: 1,
-    borderColor: '#ccc',
+    borderColor: Colors.textPrimary,
     paddingBottom: 2,
   },
   usernameInput: {
@@ -218,7 +226,7 @@ const styles = StyleSheet.create({
   editUsernameIcon: { // Can be the same as editIcon or different
     width: 24,
     height: 24,
-    tintColor: '#555',
+    tintColor: Colors.textPrimary,
   },
   headerContainer: {
     flexDirection: 'row',
@@ -230,10 +238,11 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 24,
     fontWeight: 'bold',
+    color: Colors.textPrimary,
   },
   settingsIcon: {
     width: 30, // Adjust size as needed
     height: 30, // Adjust size as needed
-    tintColor: 'black', // Make the settings icon black
+    tintColor: Colors.textPrimary, // Make the settings icon black
   },
 });
