@@ -1,15 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, FC } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, Switch, TouchableOpacity } from 'react-native';
-
+import { AntDesign } from '@expo/vector-icons';
 interface Set {
   weight: string;
   reps: string;
-  type: 'regular' | 'warmup' | 'drop'; // Set default to 'regular'
+  type: 'regular' | 'warmup' | 'drop';
 }
-const AddExercise = () => {
-  const [exerciseName, setExerciseName] = useState('');
-  const [muscleGroups, setMuscleGroups] = useState<string[]>([]);
-  const muscleGroupOptions = [
+
+// This is the component that will be duplicated for each exercise
+// Define the interface for props
+interface Props {
+  onDelete: () => void;
+}
+// All state and rendering logic for a single exercise goes here
+// This is the component that will be duplicated for each exercise
+
+  // Define the interface for props
+  interface Props {
+    onDelete: () => void;
+  }
+  
+  const AddExercise: FC<Props> = ({ onDelete }) => {
+    const [exerciseName, setExerciseName] = useState('');
+    const [muscleGroups, setMuscleGroups] = useState<string[]>([]);
+    const muscleGroupOptions = [
     'Chest',
     'Back',
     'Shoulders',
@@ -25,24 +39,32 @@ const AddExercise = () => {
       prevGroups.includes(itemValue) ? prevGroups.filter(group => group !== itemValue) : [...prevGroups, itemValue]
     );
   };
- const [sets, setSets] = useState<Set[]>([{ weight: '', reps: '', type: 'regular' }]);
- const [isBodyweight, setIsBodyweight] = useState(false);
- 
- const handleAddSet = () => {
-    setSets([...sets, { weight: isBodyweight ? 'BW' : '', reps: '', type: 'regular' }]); // Initialize new sets with type 'regular'
- };
+  const [sets, setSets] = useState<Set[]>([{ weight: '', reps: '', type: 'regular' }]);
+  const [bodyweightReps, setBodyweightReps] = useState(false);
+  const [lbs, setLbs] = useState(true);
 
- const handleSetChange = (index: number, field: 'weight' | 'reps', value: string) => {
- if (isBodyweight && field === 'weight') {
- return;
- }
- const newSets = [...sets];
- newSets[index][field] = value;
- setSets(newSets);
- };
+  const handleAddSet = () => {    setSets([...sets, { weight: bodyweightReps ? 'BW' : '', reps: '', type: 'regular' }]); // Initialize new sets with type 'regular'
+  };
+
+  const handleSetChange = (index: number, field: 'weight' | 'reps', value: string) => {
+    if (bodyweightReps && field === 'weight') {
+      return;
+    }
+    const newSets = [...sets];
+    newSets[index][field] = value;
+    setSets(newSets);
+  };
 
  return (
  <View style={styles.container}>
+ {exerciseName !== '' && ( // Show delete button only if exercise name is entered
+ <TouchableOpacity style={styles.deleteButton} onPress={onDelete}>
+ <AntDesign name="delete" size={20} color="red" />
+ </TouchableOpacity>
+ )}
+
+
+
  <View style={styles.formBox}>
  <Text>Exercise Name:</Text>
  <TextInput
@@ -55,15 +77,22 @@ const AddExercise = () => {
  <View style={styles.toggleContainer}>
  <Text>Body Weight Reps </Text>
  <Switch
- value={isBodyweight}
- onValueChange={(value) => {
-            setIsBodyweight(value);
- if (value) {
- setSets(sets.map(set => ({ ...set, weight: 'BW' })));
- }
- }}
+ value={bodyweightReps}
+ onValueChange={(isBW) => {
+ setBodyweightReps(!bodyweightReps);
+ setSets(sets.map(set => {
+ return {...set, weight: isBW ? 'BW' : '', reps: isBW ? '' : set.reps};
+ }));}}
  />
  </View>
+
+      <View style={styles.toggleContainer}>
+        <Text>{lbs ? 'Weight in Lbs' : 'Weight in Kg'}</Text>
+        <Switch
+          value={lbs}
+          onValueChange={setLbs}
+        />
+      </View>
 
         <Text>Muscle Groups:</Text>
         <View style={styles.muscleGroupContainer}>
@@ -83,29 +112,29 @@ const AddExercise = () => {
  <Text>Sets and Reps:</Text>
  {sets.map((set, index) => (
         <View key={index} style={styles.setRow}>
-          <View style={styles.setTypeContainer}>
+ <View style={styles.setTypeContainer}>
           </View>
  <TextInput
  style={styles.setInput}
  value={set.weight}
  onChangeText={(value) => handleSetChange(index, 'weight', value)}
  placeholder="Weight"
- keyboardType="numeric"
+ keyboardType={bodyweightReps ? "default" : "numeric"} // Corrected logic here
  />
  <TextInput
             style={styles.setInput}
             value={set.reps}
             onChangeText={(value) => handleSetChange(index, 'reps', value)}
-            placeholder="Reps"
+ placeholder={"Reps"}
             keyboardType="numeric"
           />
         </View>
       ))}
  
- <Button title="Add Set" onPress={handleAddSet} />
+        <Button title="Add Set" onPress={handleAddSet} />
  </View>
     </View>
-  );
+ );
 };
 
 const styles = StyleSheet.create({
@@ -138,7 +167,7 @@ const styles = StyleSheet.create({
     borderColor: 'gray',
     padding: 5,
     marginRight: 5,
- flex: 1
+    flex: 1
   },
   setTypeContainer: {
     marginRight: 5,
@@ -163,8 +192,14 @@ const styles = StyleSheet.create({
     color: 'black',
   },
   selectedMuscleGroupText: {
- color: 'white',
+    color: 'white',
+  },
+  deleteButton: {
+    position: 'absolute',
+    top: 5,
+    right: 5,
+    zIndex: 1, // Ensure the button is on top of other elements
+    padding: 5,
   },
 });
-
 export default AddExercise;

@@ -1,17 +1,17 @@
 import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
 import { Colors } from '../(tabs)/colors';
-import { useNavigation } from 'expo-router';
+import { useNavigation } from 'expo-router'; // Assuming this is correct based on the file path
 
 export default function OpenCrateScreen() {
   const navigation = useNavigation();
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('crates')}>
-        <Image source={require('../../assets/images/crate.png')} style={styles.image} />
-        <Text style={styles.text}>Open crates</Text>
-      </TouchableOpacity>
-    </View>
+    <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('crates')}>
+      <Image source={require('/home/user/onefitforall/assets/images/crate.png')} style={styles.image} />
+      <Text style={styles.text}>Open Crate</Text>
+    </TouchableOpacity>
+  </View>
   );
 }
 

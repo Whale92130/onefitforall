@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image } from 'react-native';
 import { Colors } from './colors'; // Assuming you have a colors file
 import { useRouter } from 'expo-router';
+import ThemeSelectionScreen from "./ThemeSelectionScreen";
 
 // Define Colors if not imported (replace with your actual Colors import)
 // const Colors = {
@@ -50,6 +51,11 @@ const SettingsScreen = () => {
     // Implement logout logic here
   };
 
+  const handleThemePress = () => {
+    console.log('Theme selection pressed');
+    router.push('/ThemeSelectionScreen'); // Navigate to the new ThemeSelectionScreen
+  };
+
   return (
     // Use contentContainerStyle for inner padding if needed, but paddingTop on the ScrollView works well here.
     <ScrollView style={styles.container}>
@@ -81,6 +87,11 @@ const SettingsScreen = () => {
       </TouchableOpacity>
 
       {/* Add more settings items as needed */}
+      <TouchableOpacity style={styles.settingItem} onPress={handleThemePress}>
+        <Text style={styles.settingText}>Theme</Text>
+        <Text style={styles.arrow}>{'>'}</Text>
+      </TouchableOpacity>
+
 
       {/* Logout Button */}
       <TouchableOpacity style={[styles.settingItem, styles.logoutButton]} onPress={handleLogoutPress}>

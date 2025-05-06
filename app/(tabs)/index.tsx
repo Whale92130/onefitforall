@@ -11,16 +11,22 @@ import TopBar from './topbar';
 import Navbar, { IconName } from './navbar';
 import Profile from './profile';
 //import Stopwatch from  './stopwatch';
-import { Colors } from '../(tabs)/colors';
-//import Shop from './shop';
+import { ScrollView } from 'react-native';
 import OpenCrate from './openCrate';
 import OpenShop from './openShop';
 import SettingsScreen from './settings';
+import AddExercise from './addExercise';
+import Stopwatch from './stopwatch';
+import NewExercise from './newExercise'
+import NewWorkout from './newWorkout';
+import { Colors } from '../(tabs)/colors';
+
 
 
 export default function HomeScreen() {
   const [currentSection, setCurrentSection] = useState<IconName>('home');
 
+  const [showWorkoutComponents, setShowWorkoutComponents] = useState(false);
 
   const leaderboardData = [
     { name: 'Alice Johnson', workouts: 15 },
@@ -33,9 +39,17 @@ export default function HomeScreen() {
   const renderSection = () => {
     switch (currentSection) {
       case 'newWorkout':
-        return (
+        return showWorkoutComponents ? (
           <View style={styles.sectionContainer}>
-            {/* ADD ALL CODE FOR NEW WORKOUT PAGE HERE */}
+            <ScrollView style={styles.scrollView}>
+              <Stopwatch/>
+              <NewExercise/>
+            </ScrollView>
+          </View>
+        ) : (
+          <View style={styles.sectionContainer}>
+            {/* Only show NewWorkout button when workout components are not shown */}
+            <NewWorkout onPress={() => setShowWorkoutComponents(true)} />
 
           </View>
         );
@@ -103,6 +117,10 @@ const styles = StyleSheet.create({
   bottomItem: {
     flex: 1,
     margin: 5,
+  },
+  scrollView: {
+    flex: 1,
+    width: '100%', // Ensure the ScrollView takes the full width
   },
   sectionContainer: {
     display: 'flex',

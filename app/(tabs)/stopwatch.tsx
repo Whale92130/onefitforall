@@ -2,18 +2,19 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
-const Stopwatch = () => {
+const Stopwatch = () => { 
   const [time, setTime] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
-    if (isRunning) {
+    setIsRunning(true); // Automatically start the stopwatch
+    if (true) { // Keep the interval running once started
       intervalRef.current = setInterval(() => {
-        setTime((prevTime) => prevTime + 1);
-      }, 10);
+        setTime((prevTime) => prevTime + 1000); // Increment by 1000 milliseconds (1 second)
+      }, 1000);
     } else if (intervalRef.current) {
-      clearInterval(intervalRef.current);
+      clearInterval(intervalRef.current!);
     }
 
     return () => {
@@ -23,76 +24,35 @@ const Stopwatch = () => {
     };
   }, [isRunning]);
 
-  const handleStartStop = () => {
-    setIsRunning(!isRunning);
-  };
-
-  const handleReset = () => {
-    setTime(0);
-    setIsRunning(false);
-  };
 
   const formatTime = (milliseconds: number) => {
-    const minutes = Math.floor(milliseconds / 6000);
-    const seconds = Math.floor((milliseconds % 6000) / 100);
-    const centiseconds = milliseconds % 100;
-    return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}:${centiseconds.toString().padStart(2, '0')}`;
+    const totalSeconds = Math.floor(milliseconds / 1000);
+    const hours = Math.floor(totalSeconds / 3600).toString().padStart(2, '0');
+    const minutes = Math.floor((totalSeconds % 3600) / 60).toString().padStart(2, '0');
+    const seconds = (totalSeconds % 60).toString().padStart(2, '0');
+    return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
   };
 
-  return (
-    <View style={styles.container}>
-      <Text style={styles.time}>{formatTime(time)}</Text>
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity
-          style={[styles.button, styles.startStopButton]}
-          onPress={handleStartStop}
-        >
-          <Text style={styles.buttonText}>{isRunning ? 'Stop' : 'Start'}</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.button, styles.resetButton]}
-          onPress={handleReset}
-        >
-          <Text style={styles.buttonText}>Reset</Text>
-        </TouchableOpacity>
-      </View>
+ return (
+ <View style={styles.container}>
+ <Text style={styles.time}>{formatTime(time)}</Text>
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: 'center',
+    width: '100%',
+    height: 50, // Static small height
+    justifyContent: 'flex-start',
     alignItems: 'center',
-    backgroundColor: '#f0f0f0',
+    backgroundColor: 'transparent', // Transparent background
   },
   time: {
-    fontSize: 48,
+    fontSize: 24, // Smaller font size
     fontWeight: 'bold',
-    marginBottom: 20,
     color: '#333',
   },
-  buttonContainer: {
-    flexDirection: 'row',
-    width: '80%',
-    justifyContent: 'space-around',
-  },
-  button: {
-    paddingVertical: 15,
-    paddingHorizontal: 25,
-    borderRadius: 10,
-  },
-  startStopButton: {
-    backgroundColor: '#4CAF50',
-  },
-  resetButton: {
-    backgroundColor: '#f44336',
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: 'bold',
+  timePadding: {
   },
 });
 

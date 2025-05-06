@@ -12,6 +12,7 @@ type Item = {
 
 const Shop = () => {
   const [money, setMoney] = useState(900000);
+  const [purchasedItems, setPurchasedItems] = useState<string[]>([]);
   const navigation = useNavigation();
   const items: Item[] = [
     { name: 'Golden Wreath', price: 1000000 },
@@ -23,9 +24,14 @@ const Shop = () => {
   ];
  
   const buyItem = (item: Item) => {
-    if (money >= item.price) {
+    if (purchasedItems.includes(item.name)) {
+      alert("You already own this item!");
+    } else if (money >= item.price) {
         setMoney(money - item.price);
+        setPurchasedItems([...purchasedItems, item.name]);
       alert(`You bought ${item.name} for ${item.price}!`);
+    } else if (purchasedItems.includes(item.name)) {
+ alert("You already own this item!");
     } else { alert("You don't have enough money!"); }
   };
 
