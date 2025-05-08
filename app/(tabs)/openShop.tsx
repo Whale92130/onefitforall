@@ -8,7 +8,7 @@ export default function OpenShopScreen() {
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('shop')}>
-        <Image source={require('../../assets/navbar_icons/shop_icon.png')} style={styles.image} />
+        <Image source={require('../../assets/images/shop_icon.png')} style={styles.image} />
         <Text style={styles.text}>Open Shop</Text>
       </TouchableOpacity>
     </View>

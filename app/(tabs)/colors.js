@@ -1,48 +1,53 @@
 let currentTheme = 'light';
 
-const themes = {
+export const themes = {
   light: {
-    primary: '#D8D8EB',      // light purple
-    secondary: '#7A7AA3',    // dark purple
-    background: '#ffffff',   // white
-    textPrimary: '#000000',  // black
-    textSecondary: '#FFFFFF',  // white
-    button: '#007FFF', // blue
-    buttonHighlight: '#4691DC', // dark blue
+    primary: '#D8D8EB',
+    secondary: '#7A7AA3',
+    background: '#ffffff',
+    textPrimary: '#000000',
+    textSecondary: '#FFFFFF',
+    button: '#007FFF',
+    buttonHighlight: '#4691DC',
   },
   dark: {
-    primary: "#222222",
-    secondary: "#555555",
-    background: "#000000",
-    textPrimary: "#FFFFFF",
-    textSecondary: "#000000",
-    button: "#004488",
-    buttonHighlight: "#002244",
+    primary: '#222222',
+    secondary: '#555555',
+    background: '#000000',
+    textPrimary: '#FFFFFF',
+    textSecondary: '#000000',
+    button: '#004488',
+    buttonHighlight: '#002244',
   },
   goodBoy: {
-    primary: "#222222",
-    secondary: "#555555",
-    background: "#000000",
-    textPrimary: "#FFFFFF",
-    textSecondary: "#000000",
-    button: "#004488",
-    buttonHighlight: "#002244",
+    primary: '#333333',
+    secondary: '#888888',
+    background: '#111111',
+    textPrimary: '#FAFAFA',
+    textSecondary: '#222222',
+    button: '#0088CC',
+    buttonHighlight: '#006699',
   },
   CCA: {
-    primary: "#222222",
-    secondary: "#555555",
-    background: "#000000",
-    textPrimary: "#FFFFFF",
-    textSecondary: "#000000",
-    button: "#004488",
-    buttonHighlight: "#002244",
+    primary: '#444444',
+    secondary: '#777777',
+    background: '#121212',
+    textPrimary: '#FFFFFF',
+    textSecondary: '#222222',
+    button: '#0099FF',
+    buttonHighlight: '#0077CC',
   },
 };
 
-export const Colors = new Proxy(themes.light, {
-  get: (target, property) => themes[currentTheme][property] || target[property],
-});
+let Colors = { ...themes[currentTheme] };
 
 export const switchTheme = (themeName) => {
-  currentTheme = themeName;
+  if (themes[themeName]) {
+    currentTheme = themeName;
+    Object.assign(Colors, themes[themeName]);
+  } else {
+    console.warn(`Theme "${themeName}" does not exist.`);
+  }
 };
+
+export { Colors };

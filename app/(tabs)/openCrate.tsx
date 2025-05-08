@@ -8,7 +8,7 @@ export default function OpenCrateScreen() {
   return (
     <View style={styles.container}>
     <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('crates')}>
-      <Image source={require('/home/user/onefitforall/assets/images/crate.png')} style={styles.image} />
+      <Image source={require('../../assets/images/crate.png')} style={styles.image} />
       <Text style={styles.text}>Open Crate</Text>
     </TouchableOpacity>
   </View>

@@ -25,15 +25,15 @@ export type NavbarProps = {
 const ICONS: IconConfig[] = [
   {
     name: 'home',
-    source: require('../../assets/navbar_icons/home_icon.png'),
+    source: require('../../assets/images/home_icon.png'),
   },
   {
     name: 'newWorkout',
-    source: require('../../assets/navbar_icons/start_icon.png'),
+    source: require('../../assets/images/start_icon.png'),
   },
   {
     name: 'profile',
-    source: require('../../assets/icons/logo.jpeg'),
+    source: require('../../assets/images/logo.jpeg'),
   },
 ];
 

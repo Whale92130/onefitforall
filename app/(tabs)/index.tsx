@@ -19,8 +19,10 @@ import AddExercise from './addExercise';
 import Stopwatch from './stopwatch';
 import NewExercise from './newExercise'
 import NewWorkout from './newWorkout';
+import FinishWorkoutButton from './finishWorkoutButton';
 import { Colors } from '../(tabs)/colors';
 
+import WelcomeScreen from './welcomeScreen'; // Import WelcomeScreen
 
 
 export default function HomeScreen() {
@@ -28,24 +30,30 @@ export default function HomeScreen() {
 
   const [showWorkoutComponents, setShowWorkoutComponents] = useState(false);
 
-  const leaderboardData = [
-    { name: 'Alice Johnson', workouts: 15 },
+  const leaderboardData = [{ name: 'Alice Johnson', workouts: 15 },
     { name: 'Bob Williams', workouts: 20 },
     { name: 'Charlie Brown', workouts: 10 },
   ];
+
+ const [showWelcomeScreen, setShowWelcomeScreen] = useState(true); // State to control WelcomeScreen visibility
+    
 
   const Stack = createStackNavigator();
 
   const renderSection = () => {
     switch (currentSection) {
       case 'newWorkout':
-        return showWorkoutComponents ? (
-          <View style={styles.sectionContainer}>
-            <ScrollView style={styles.scrollView}>
-              <Stopwatch/>
-              <NewExercise/>
-            </ScrollView>
-          </View>
+        return showWorkoutComponents ? ( 
+          <>
+            <View style={styles.sectionContainer}>
+              <ScrollView style={styles.scrollView}>
+                <Stopwatch/>
+                <NewExercise/>
+              </ScrollView>
+            </View>
+              {/* Show the FinishWorkoutButton below the ScrollView */}
+            <FinishWorkoutButton onPress={() => setShowWorkoutComponents(false)} />
+          </>
         ) : (
           <View style={styles.sectionContainer}>
             {/* Only show NewWorkout button when workout components are not shown */}
@@ -68,7 +76,7 @@ export default function HomeScreen() {
       case 'home':
       default:
         return (
-          <>
+ <>
             <TopBar />
             <View style={styles.topSection}>
               <RecomendedWorkouts />
@@ -88,13 +96,21 @@ export default function HomeScreen() {
 
 
   return (
+
     <View style={styles.container}>
+      {showWelcomeScreen ? (
+        <WelcomeScreen onSignInPress={() => setShowWelcomeScreen(false)} />
+      ) : (
+ <>
       {renderSection()}
       <Navbar
         activeIcon={currentSection}
         onIconPress={(icon) => setCurrentSection(icon)}
       />
+ </>
+      )}
     </View>
+
   );
 }
 
@@ -133,3 +149,5 @@ const styles = StyleSheet.create({
     marginTop: 10, // Add some space below the profile
   },
 });
+
+//npx expo export --platform web

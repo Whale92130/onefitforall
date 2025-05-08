@@ -70,7 +70,7 @@ interface Props {
  <TextInput
  style={styles.input}
  value={exerciseName}
- onChangeText={setExerciseName}
+ onChangeText={setExerciseName} 
  placeholder="Enter exercise name"
  />
  
@@ -124,7 +124,7 @@ interface Props {
  <TextInput
             style={styles.setInput}
             value={set.reps}
-            onChangeText={(value) => handleSetChange(index, 'reps', value)}
+            onChangeText={(value) => handleSetChange(index, 'reps', value)} 
  placeholder={"Reps"}
             keyboardType="numeric"
           />
@@ -149,8 +149,8 @@ const styles = StyleSheet.create({
   },
   input: {
     borderWidth: 1,
-    borderColor: 'gray',
-    marginBottom: 10,
+    borderColor: 'black',
+    width: '40%',
     padding: 5,
   },
   toggleContainer: {
@@ -164,8 +164,8 @@ const styles = StyleSheet.create({
   },
   setInput: {
     borderWidth: 1,
-    borderColor: 'gray',
-    padding: 5,
+    borderColor: 'black',
+    width: '10%',
     marginRight: 5,
     flex: 1
   },

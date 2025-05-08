@@ -7,11 +7,14 @@ import { IconSymbol } from '@/components/ui/IconSymbol';
 import TabBarBackground from '@/components/ui/TabBarBackground';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
+import { ThemeProvider } from './themeContext';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
 
   return (
+    <>
+   <ThemeProvider>
     <Tabs
       screenOptions={{
         tabBarShowLabel: false,
@@ -21,7 +24,8 @@ export default function TabLayout() {
         tabBarButton: HapticTab,
         tabBarBackground: TabBarBackground,
         tabBarStyle: {
-          display: 'none',
+          //change to none to remove bottom bar
+          display: 'flex'
         },
       }}
     >
@@ -53,5 +57,7 @@ export default function TabLayout() {
         }}
       />
     </Tabs>
+    </ThemeProvider>
+    </>
   );
 }
